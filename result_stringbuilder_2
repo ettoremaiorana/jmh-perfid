@@ -1,0 +1,1146 @@
+# JMH 1.12 (released 99 days ago, please consider updating!)
+# VM version: JDK 1.8.0_91, VM 25.91-b14
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: <none>
+# Warmup: 5 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: fourcasters.DoubleFormatting.speedyTest
+
+# Run progress: 0.00% complete, ETA 00:00:20
+# Fork: 1 of 1
+# Preparing profilers: LinuxPerfAsmProfiler 
+# Profilers consume stdout and stderr from target VM, use -v EXTRA to copy to console
+# Warmup Iteration   1: 85.433 ops/s
+# Warmup Iteration   2: 105.062 ops/s
+# Warmup Iteration   3: 106.488 ops/s
+# Warmup Iteration   4: 106.529 ops/s
+# Warmup Iteration   5: 106.061 ops/s
+Iteration   1: 106.322 ops/s
+Iteration   2: 106.036 ops/s
+Iteration   3: 106.460 ops/s
+Iteration   4: 106.190 ops/s
+Iteration   5: 103.264 ops/s
+# Processing profiler results: LinuxPerfAsmProfiler 
+
+
+Result "speedyTest":
+  105.654 ±(99.9%) 5.181 ops/s [Average]
+  (min, avg, max) = (103.264, 105.654, 106.460), stdev = 1.346
+  CI (99.9%): [100.473, 110.836] (assumes normal distribution)
+
+Secondary result "·asm":
+PrintAssembly processed: 156791 total address lines.
+Perf output processed (skipped 5.158 seconds):
+ Column 1: cycles (7273 events)
+ Column 2: instructions (7233 events)
+
+Hottest code regions (>10.00% "cycles" events):
+....[Hottest Region 1]..............................................................................
+ [0x7f511cbeabe8:0x7f511cbead6d] in fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits
+
+                                                                       ;*if_icmpge
+                                                                       ; - fourcasters.perfid.SpeedyDoubleFormatter::magnitude@69 (line 151)
+                                                                       ; - fourcasters.perfid.SpeedyDoubleFormatter::magnitude@5 (line 197)
+                                                                       ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@2 (line 166)
+                                                                       ;   {runtime_call}
+                         0x00007f511cbeabe8: callq  0x00007f5131d2f160  ;*if_icmpge
+                                                                       ; - fourcasters.perfid.SpeedyDoubleFormatter::magnitude@69 (line 151)
+                                                                       ; - fourcasters.perfid.SpeedyDoubleFormatter::magnitude@5 (line 197)
+                                                                       ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@2 (line 166)
+                                                                       ;   {runtime_call}
+  0.12%               ↗  0x00007f511cbeabed: mov    %rdx,%rbx
+                      │  0x00007f511cbeabf0: shl    $0x3,%rbx          ;*return
+                      │                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@15 (line 122)
+                      │                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                      │                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                      │                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@54 (line 175)
+                      │  0x00007f511cbeabf4: mov    0xc(%rbx),%r9d
+                      │  0x00007f511cbeabf8: cmp    %r9d,%ecx
+                      │  0x00007f511cbeabfb: jae    0x00007f511cbeb51d
+  0.11%               │  0x00007f511cbeac01: mov    $0x2e,%edi
+                      │  0x00007f511cbeac06: mov    %di,0x10(%rbx,%rcx,2)  ;*castore
+                      │                                                ; - java.lang.AbstractStringBuilder::append@26 (line 623)
+                      │                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                      │                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@54 (line 175)
+                      │  0x00007f511cbeac0b: nopl   0x0(%rax,%rax,1)   ;*lload
+                      │                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@58 (line 176)
+                     ↗│  0x00007f511cbeac10: imul   0x50(%rsp),%r11    ;*lmul
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@62 (line 176)
+  1.22%    0.06%     ││  0x00007f511cbeac16: cmp    0x68(%rsp),%r11
+                     ││  0x00007f511cbeac1b: jg     0x00007f511cbeb38d  ;*goto
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@80 (line 180)
+                     ││  0x00007f511cbeac21: mov    0x68(%rsp),%rdx
+                     ││  0x00007f511cbeac26: sub    %r11,%rdx          ;*lsub
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@75 (line 178)
+  0.08%              ││  0x00007f511cbeac29: dec    %r10d              ; OopMap{[32]=Oop off=332}
+                     ││                                                ;*goto
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@80 (line 180)
+  1.29%    0.24%     ││  0x00007f511cbeac2c: test   %eax,0x165fe3ce(%rip)        # 0x00007f51331e9000
+                     ││                                                ;*goto
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@80 (line 180)
+                     ││                                                ;   {poll}
+                     ││  0x00007f511cbeac32: test   %rdx,%rdx
+                     ││  0x00007f511cbeac35: jle    0x00007f511cbead7e
+           0.01%     ││  0x00007f511cbeac3b: mov    %r8d,0x10(%rsp)
+                     ││  0x00007f511cbeac40: mov    %rdx,0x68(%rsp)    ;*getstatic d_magnitudes
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@13 (line 170)
+  1.25%    0.36%     ││  0x00007f511cbeac45: mov    %r10d,%r11d
+  0.04%    0.03%     ││  0x00007f511cbeac48: add    $0x143,%r11d       ;*iadd
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@21 (line 170)
+                     ││  0x00007f511cbeac4f: cmp    $0x278,%r11d
+                     ││  0x00007f511cbeac56: jae    0x00007f511cbeb303  ;*daload
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@22 (line 170)
+                     ││  0x00007f511cbeac5c: movslq %r10d,%r11
+  1.20%    0.47%     ││  0x00007f511cbeac5f: mov    $0x76de02ae0,%r8   ;   {oop([D)}
+           0.06%     ││  0x00007f511cbeac69: vmovsd 0xa28(%r8,%r11,8),%xmm0
+  0.01%              ││  0x00007f511cbeac73: vcvttsd2si %xmm0,%r11
+  1.33%    0.33%     ││  0x00007f511cbeac78: cmp    -0x1bfd7f(%rip),%r11        # Stub::double_sign_flip
+                     ││                                                ;   {external_word}
+  0.04%    0.07%  ╭  ││  0x00007f511cbeac7f: jne    0x00007f511cbeac91
+                  │  ││  0x00007f511cbeac81: sub    $0x8,%rsp
+                  │  ││  0x00007f511cbeac85: vmovsd %xmm0,(%rsp)
+                  │  ││  0x00007f511cbeac8a: callq  Stub::d2l_fixup    ;   {runtime_call}
+                  │  ││  0x00007f511cbeac8f: pop    %r11               ;*d2l  ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@23 (line 170)
+  0.01%    0.06%  ↘  ││  0x00007f511cbeac91: test   %r11,%r11
+                     ││  0x00007f511cbeac94: je     0x00007f511cbeb329
+  0.01%    0.04%     ││  0x00007f511cbeac9a: mov    0x68(%rsp),%rax
+  1.18%    2.53%     ││  0x00007f511cbeac9f: mov    $0x8000000000000000,%rdx
+  0.03%    0.03%     ││  0x00007f511cbeaca9: cmp    %rdx,%rax
+                   ╭ ││  0x00007f511cbeacac: jne    0x00007f511cbeacb6
+                   │ ││  0x00007f511cbeacae: xor    %edx,%edx
+                   │ ││  0x00007f511cbeacb0: cmp    $0xffffffffffffffff,%r11
+                   │╭││  0x00007f511cbeacb4: je     0x00007f511cbeacbb
+           0.04%   ↘│││  0x00007f511cbeacb6: cqto   
+           0.04%    │││  0x00007f511cbeacb8: idiv   %r11               ;*ldiv
+                    │││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@29 (line 171)
+ 50.24%   56.03%    ↘││  0x00007f511cbeacbb: mov    %rax,0x50(%rsp)
+  0.56%              ││  0x00007f511cbeacc0: mov    %eax,%ecx          ;*l2i  ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@38 (line 172)
+  0.08%              ││  0x00007f511cbeacc2: cmp    $0x24,%ecx
+                     ││  0x00007f511cbeacc5: jae    0x00007f511cbeb339  ;*caload
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@39 (line 172)
+  0.03%              ││  0x00007f511cbeaccb: mov    0x20(%rsp),%r8
+  0.59%              ││  0x00007f511cbeacd0: mov    0x10(%r8),%edx     ;*getfield value
+                     ││                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@2 (line 120)
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+  0.74%              ││  0x00007f511cbeacd4: mov    0xc(%r12,%rdx,8),%ebx  ;*arraylength
+                     ││                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@5 (line 120)
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+                     ││                                                ; implicit exception: dispatches to 0x00007f511cbeb8b5
+  0.01%              ││  0x00007f511cbeacd9: mov    $0x76de02a28,%r8   ;   {oop([C)}
+  0.01%              ││  0x00007f511cbeace3: movzwl 0x10(%r8,%rcx,2),%r9d  ;*caload
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@39 (line 172)
+  4.08%              ││  0x00007f511cbeace9: mov    %r9d,0x48(%rsp)
+  1.15%              ││  0x00007f511cbeacee: mov    0x20(%rsp),%r8
+                     ││  0x00007f511cbeacf3: mov    0xc(%r8),%r9d      ;*getfield count
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@2 (line 622)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+                     ││  0x00007f511cbeacf7: mov    %r9d,%esi
+  0.03%              ││  0x00007f511cbeacfa: sub    %ebx,%esi
+  1.46%              ││  0x00007f511cbeacfc: mov    %rdx,%rdi
+                     ││  0x00007f511cbeacff: shl    $0x3,%rdi          ;*getfield value
+                     ││                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@2 (line 120)
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+                     ││  0x00007f511cbead03: inc    %esi
+  0.01%              ││  0x00007f511cbead05: mov    %r9d,%ecx
+  1.31%              ││  0x00007f511cbead08: inc    %ecx               ;*iadd
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@6 (line 622)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+                     ││  0x00007f511cbead0a: test   %esi,%esi
+                     ││  0x00007f511cbead0c: jg     0x00007f511cbeae4e  ;*ifle
+                     ││                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@7 (line 120)
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+                     ││  0x00007f511cbead12: mov    %ecx,0xc(%r8)      ;*putfield count
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@22 (line 623)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+                     ││  0x00007f511cbead16: mov    %rdi,%rax          ;*getfield value
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@11 (line 623)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+  1.33%              ││  0x00007f511cbead19: mov    0xc(%rdi),%ebp
+                     ││  0x00007f511cbead1c: cmp    %ebp,%r9d
+                     ││  0x00007f511cbead1f: jae    0x00007f511cbeb361
+                     ││  0x00007f511cbead25: mov    0x48(%rsp),%r8d
+  1.47%              ││  0x00007f511cbead2a: mov    %r8w,0x10(%rdi,%r9,2)  ;*castore
+                     ││                                                ; - java.lang.AbstractStringBuilder::append@26 (line 623)
+                     ││                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@40 (line 172)
+  2.42%              ││  0x00007f511cbead30: mov    0x10(%rsp),%r8d
+                     ││  0x00007f511cbead35: dec    %r8d               ;*iinc
+                     ││                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@44 (line 173)
+                     ││  0x00007f511cbead38: test   %r8d,%r8d
+                     ╰│  0x00007f511cbead3b: jne    0x00007f511cbeac10  ;*ifne
+                      │                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@48 (line 174)
+                      │  0x00007f511cbead41: mov    %r9d,%esi
+  0.14%               │  0x00007f511cbead44: sub    %ebp,%esi
+                      │  0x00007f511cbead46: add    $0x2,%esi
+                      │  0x00007f511cbead49: test   %esi,%esi
+                      │  0x00007f511cbead4b: jg     0x00007f511cbeafe2  ;*ifle
+                      │                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@7 (line 120)
+                      │                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                      │                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                      │                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@54 (line 175)
+                      │  0x00007f511cbead51: mov    %ecx,%ebx
+  0.05%               │  0x00007f511cbead53: inc    %ebx
+                      │  0x00007f511cbead55: mov    0x20(%rsp),%r9
+                      │  0x00007f511cbead5a: mov    %ebx,0xc(%r9)      ;*putfield count
+                      │                                                ; - java.lang.AbstractStringBuilder::append@22 (line 623)
+                      │                                                ; - java.lang.StringBuilder::append@2 (line 202)
+                      │                                                ; - fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits@54 (line 175)
+                      │  0x00007f511cbead5e: test   %edx,%edx
+                      ╰  0x00007f511cbead60: jne    0x00007f511cbeabed
+                         0x00007f511cbead66: mov    $0xfffffff6,%esi
+                         0x00007f511cbead6b: mov    %ecx,%ebp
+                         0x00007f511cbead6d: xchg   %ax,%ax
+....................................................................................................
+ 73.68%   60.39%  <total for region 1>
+
+....[Hottest Regions]...............................................................................
+ 73.68%   60.39%  [0x7f511cbeabe8:0x7f511cbead6d] in fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits
+  7.93%   13.85%  [0x7f511cbe67b0:0x7f511cbe6ba7] in fourcasters.perfid.SpeedyDoubleFormatter::append
+  3.97%    3.98%  [0xffffffff810644ba:0xffffffff810644bd] in [unknown] ([unknown])
+  2.83%    4.08%  [0x7f511cbeaad4:0x7f511cbeabc7] in fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits
+  2.28%    6.24%  [0x7f511cbeeed7:0x7f511cbef11b] in fourcasters.DoubleFormatting::speedyTest
+  2.25%    3.17%  [0x7f511cbead74:0x7f511cbeae54] in fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits
+  1.88%    1.01%  [0x7f5131c0c340:0x7f5131c0c349] in [unknown] (libjvm.so)
+  0.87%    1.49%  [0x7f5131e59928:0x7f5131e59931] in [unknown] (libjvm.so)
+  0.70%    1.04%  [0x7f511cbe6bb8:0x7f511cbe6c32] in fourcasters.perfid.SpeedyDoubleFormatter::append
+  0.40%    1.26%  [0x7f511ca2b4a0:0x7f511ca2b514] in StubRoutines::jlong_disjoint_arraycopy
+  0.29%    0.65%  [0x7f511cbd2e60:0x7f511cbd2edb] in org.openjdk.jmh.infra.Blackhole::consume
+  0.19%    0.29%  [0x7f511ca2b4e5:0x7f511ca2b540] in StubRoutines::jlong_disjoint_arraycopy
+  0.14%    0.03%  [0xffffffff818255a0:0xffffffff818255a0] in [unknown] ([unknown])
+  0.10%    0.06%  [0x7f5131e49a1d:0x7f5131e49a33] in [unknown] (libjvm.so)
+  0.08%    0.03%  [0xffffffff81825510:0xffffffff81825525] in [unknown] ([unknown])
+  0.08%    0.07%  [0x7f5131e49998:0x7f5131e499ab] in [unknown] (libjvm.so)
+  0.07%           [0xffffffff813f7b77:0xffffffff813f7b77] in [unknown] ([unknown])
+  0.05%    0.01%  [0xffffffff818274ab:0xffffffff818274c6] in [unknown] ([unknown])
+  0.05%    0.03%  [0xffffffff81827650:0xffffffff81827680] in [unknown] ([unknown])
+  0.04%    0.04%  [0xffffffff8100aeda:0xffffffff8100aeda] in [unknown] ([unknown])
+  2.08%    2.30%  <...other 232 warm regions...>
+....................................................................................................
+ 99.99%  100.00%  <totals>
+
+....[Hottest Methods (after inlining)]..............................................................
+ 78.77%   67.63%  fourcasters.perfid.SpeedyDoubleFormatter::appendFractDigits
+  8.63%   14.89%  fourcasters.perfid.SpeedyDoubleFormatter::append
+  5.36%    5.18%  [unknown] ([unknown])
+  3.62%    3.36%  [unknown] (libjvm.so)
+  2.28%    6.24%  fourcasters.DoubleFormatting::speedyTest
+  0.59%    1.55%  StubRoutines::jlong_disjoint_arraycopy
+  0.29%    0.65%  org.openjdk.jmh.infra.Blackhole::consume
+  0.10%    0.03%  print_insn (hsdis-amd64.so)
+  0.05%    0.15%  vfprintf (libc-2.23.so)
+  0.03%    0.04%  _IO_fwrite (libc-2.23.so)
+  0.03%           _IO_file_xsputn@@GLIBC_2.2.5 (libc-2.23.so)
+  0.03%           pthread_cond_wait@@GLIBC_2.3.2 (libpthread-2.23.so)
+  0.03%    0.03%  __libc_enable_asynccancel (libc-2.23.so)
+  0.01%           __sched_yield (libc-2.23.so)
+  0.01%           pthread_self (libc-2.23.so)
+  0.01%           fwrite@plt (libjvm.so)
+  0.01%           __GI___mempcpy (libc-2.23.so)
+  0.01%           <stub: areturn  176 areturn>
+  0.01%    0.01%  strlen (libc-2.23.so)
+  0.01%           pthread_cond_timedwait@@GLIBC_2.3.2 (libpthread-2.23.so)
+  0.08%    0.01%  <...other 6 warm methods...>
+....................................................................................................
+ 99.99%   99.78%  <totals>
+
+....[Distribution by Area]..........................................................................
+ 90.60%   90.99%  <generated code>
+  5.36%    5.18%  <native code in ([unknown])>
+  3.63%    3.36%  <native code in (libjvm.so)>
+  0.23%    0.39%  <native code in (libc-2.23.so)>
+  0.12%    0.06%  <native code in (hsdis-amd64.so)>
+  0.04%    0.03%  <native code in (libpthread-2.23.so)>
+....................................................................................................
+ 99.99%  100.00%  <totals>
+
+
+
+# JMH 1.12 (released 99 days ago, please consider updating!)
+# VM version: JDK 1.8.0_91, VM 25.91-b14
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: <none>
+# Warmup: 5 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: fourcasters.DoubleFormatting.superslow
+
+# Run progress: 50.00% complete, ETA 00:00:12
+# Fork: 1 of 1
+# Preparing profilers: LinuxPerfAsmProfiler 
+# Profilers consume stdout and stderr from target VM, use -v EXTRA to copy to console
+# Warmup Iteration   1: 24.527 ops/s
+# Warmup Iteration   2: 40.930 ops/s
+# Warmup Iteration   3: 62.179 ops/s
+# Warmup Iteration   4: 70.194 ops/s
+# Warmup Iteration   5: 70.684 ops/s
+Iteration   1: 70.322 ops/s
+Iteration   2: 69.882 ops/s
+Iteration   3: 70.530 ops/s
+Iteration   4: 69.515 ops/s
+Iteration   5: 70.272 ops/s
+# Processing profiler results: LinuxPerfAsmProfiler 
+
+
+Result "superslow":
+  70.104 ±(99.9%) 1.557 ops/s [Average]
+  (min, avg, max) = (69.515, 70.104, 70.530), stdev = 0.404
+  CI (99.9%): [68.548, 71.661] (assumes normal distribution)
+
+Secondary result "·asm":
+PrintAssembly processed: 179852 total address lines.
+Perf output processed (skipped 5.247 seconds):
+ Column 1: cycles (7639 events)
+ Column 2: instructions (7621 events)
+
+Hottest code regions (>10.00% "cycles" events):
+....[Hottest Region 1]..............................................................................
+ [0x7fd8e07e16ac:0x7fd8e07e1833] in sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa
+
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1004 (line 690)
+                              0x00007fd8e07e16ac: xor    %r10d,%r10d        ;*istore
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1012 (line 690)
+  0.01%                       0x00007fd8e07e16af: cmp    (%rsp),%r9d
+                              0x00007fd8e07e16b3: jl     0x00007fd8e07e1614
+                              0x00007fd8e07e16b9: cmp    %edi,%r9d
+                              0x00007fd8e07e16bc: jge    0x00007fd8e07e1c2a
+                              0x00007fd8e07e16c2: mov    %rdx,%rax
+                  ╭           0x00007fd8e07e16c5: jmp    0x00007fd8e07e16f4
+                  │           0x00007fd8e07e16c7: nopw   0x0(%rax,%rax,1)
+  0.09%           │    ↗      0x00007fd8e07e16d0: xor    %ebx,%ebx          ;*istore
+                  │    │                                                    ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@994 (line 689)
+  0.17%           │    │↗     0x00007fd8e07e16d2: mov    %rdx,%r10
+  0.33%           │    ││     0x00007fd8e07e16d5: add    %r11,%r10
+  0.08%    0.07%  │    ││     0x00007fd8e07e16d8: cmp    0x20(%rsp),%r10
+                  │    ││     0x00007fd8e07e16dd: jg     0x00007fd8e07e1853  ;*ifle
+                  │    ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1004 (line 690)
+  0.20%    0.04%  │    ││     0x00007fd8e07e16e3: xor    %r10d,%r10d        ;*istore
+                  │    ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1012 (line 690)
+  0.13%    0.01%  │    ││     0x00007fd8e07e16e6: cmp    %edi,%ecx
+                  │    ││     0x00007fd8e07e16e8: jge    0x00007fd8e07e1c32
+  0.20%    0.01%  │    ││     0x00007fd8e07e16ee: mov    %ecx,%r9d
+                  │    ││     0x00007fd8e07e16f1: mov    %rdx,%rax          ;*iload
+                  │    ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@919 (line 683)
+  0.12%           ↘    ││     0x00007fd8e07e16f4: vmovq  %xmm2,%r8
+  0.21%    0.03%       ││     0x00007fd8e07e16f9: mov    %r8d,%edx
+  0.39%    0.03%       ││     0x00007fd8e07e16fc: mov    %r9d,%ecx
+  0.01%                ││     0x00007fd8e07e16ff: inc    %ecx               ;*iinc
+                       ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1029 (line 700)
+  0.16%    0.04%       ││     0x00007fd8e07e1701: add    $0x30,%edx
+  0.25%    0.03%       ││     0x00007fd8e07e1704: mov    %dx,0x10(%rbp,%r9,2)  ;*castore
+                       ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1038 (line 700)
+  0.37%    0.01%       ││     0x00007fd8e07e170a: cmp    %r11,%rax
+                   ╭   ││     0x00007fd8e07e170d: jl     0x00007fd8e07e1775  ;*ifne
+                   │   ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@916 (line 683)
+  0.01%            │   ││     0x00007fd8e07e170f: test   %r10d,%r10d
+                   │╭  ││     0x00007fd8e07e1712: jne    0x00007fd8e07e176e  ;*ifne
+                   ││  ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@921 (line 683)
+  0.12%            ││  ││     0x00007fd8e07e1714: mov    $0x8000000000000000,%rdx
+  0.26%            ││  ││     0x00007fd8e07e171e: cmp    %rdx,%rax
+                   ││╭ ││     0x00007fd8e07e1721: jne    0x00007fd8e07e172b
+                   │││ ││     0x00007fd8e07e1723: xor    %edx,%edx
+                   │││ ││     0x00007fd8e07e1725: cmp    $0xffffffffffffffff,%r14
+                   │││╭││     0x00007fd8e07e1729: je     0x00007fd8e07e1730
+  0.39%            ││↘│││     0x00007fd8e07e172b: cqto   
+  0.01%            ││ │││     0x00007fd8e07e172d: idiv   %r14
+ 22.25%   11.01%   ││ ↘││     0x00007fd8e07e1730: vmovq  %rax,%xmm2
+  0.25%            ││  ││     0x00007fd8e07e1735: mov    %r11,%r10
+                   ││  ││     0x00007fd8e07e1738: shl    $0x3,%r10
+                   ││  ││     0x00007fd8e07e173c: mov    %rdx,%r8
+  0.25%            ││  ││     0x00007fd8e07e173f: shl    $0x3,%r8
+  0.27%            ││  ││     0x00007fd8e07e1743: shl    %rdx
+                   ││  ││     0x00007fd8e07e1746: add    %r8,%rdx           ;*lmul
+                   ││  ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@940 (line 685)
+  0.09%            ││  ││     0x00007fd8e07e1749: shl    %r11
+  0.16%            ││  ││     0x00007fd8e07e174c: add    %r10,%r11          ;*lmul
+                   ││  ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@948 (line 686)
+  0.34%            ││  ││     0x00007fd8e07e174f: test   %r11,%r11
+                   ││  ││     0x00007fd8e07e1752: jle    0x00007fd8e07e1d63  ;*ifle
+                   ││  ││                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@978 (line 688)
+  0.01%            ││  ││     0x00007fd8e07e1758: cmp    %r11,%rdx
+                   ││  ╰│     0x00007fd8e07e175b: jge    0x00007fd8e07e16d0  ;*ifge
+                   ││   │                                                   ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@986 (line 689)
+  0.22%            ││   │     0x00007fd8e07e1761: mov    $0x1,%ebx
+  0.08%    0.05%   ││   ╰     0x00007fd8e07e1766: jmpq   0x00007fd8e07e16d2
+                   ││         0x00007fd8e07e176b: mov    %r9d,%ecx
+                   │↘         0x00007fd8e07e176e: xor    %ebx,%ebx
+  0.01%            │     ╭    0x00007fd8e07e1770: jmp    0x00007fd8e07e1775
+                   │     │    0x00007fd8e07e1772: mov    %r9d,%ecx          ;*ifne
+                   │     │                                                  ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@916 (line 683)
+  0.04%            ↘     ↘    0x00007fd8e07e1775: test   %rax,%rax
+                          ╭   0x00007fd8e07e1778: je     0x00007fd8e07e177c  ;*ifne
+                          │                                                 ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1056 (line 703)
+                          │   0x00007fd8e07e177a: xor    %esi,%esi
+                          ↘   0x00007fd8e07e177c: mov    0x30(%rsp),%r8
+  0.04%                       0x00007fd8e07e1781: mov    %sil,0x19(%r8)     ;*putfield exactDecimalConversion
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1064 (line 703)
+  0.34%    0.14%              0x00007fd8e07e1785: mov    %ecx,0x14(%r8)     ;*putfield nDigits
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1442 (line 762)
+  0.04%    0.09%              0x00007fd8e07e1789: mov    %r12d,0x10(%r8)    ;*putfield firstDigitIndex
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1436 (line 761)
+  0.04%    0.03%              0x00007fd8e07e178d: mov    %r13d,%r9d
+                              0x00007fd8e07e1790: inc    %r9d
+                              0x00007fd8e07e1793: mov    %r9d,0xc(%r8)      ;*putfield decExponent
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1431 (line 760)
+  0.03%    0.01%              0x00007fd8e07e1797: test   %r10d,%r10d
+                              0x00007fd8e07e179a: je     0x00007fd8e07e1847  ;*ifeq
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1447 (line 766)
+  0.01%                       0x00007fd8e07e17a0: mov    %ecx,%edx
+                              0x00007fd8e07e17a2: dec    %edx               ;*isub
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@10 (line 789)
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1498 (line 775)
+                              0x00007fd8e07e17a4: mov    %ecx,%r10d
+  0.01%                       0x00007fd8e07e17a7: add    $0xfffffffffffffffe,%r10d
+  0.01%                       0x00007fd8e07e17ab: mov    %edi,%r9d
+                              0x00007fd8e07e17ae: dec    %r9d
+  0.03%                       0x00007fd8e07e17b1: cmp    %r9d,%r10d
+                              0x00007fd8e07e17b4: cmovg  %r9d,%r10d
+  0.05%                       0x00007fd8e07e17b8: xor    %r11d,%r11d
+                              0x00007fd8e07e17bb: xor    %r9d,%r9d
+                              0x00007fd8e07e17be: cmp    %r11d,%r10d
+                              0x00007fd8e07e17c1: cmovl  %r9d,%r10d
+                              0x00007fd8e07e17c5: mov    %r13d,%esi
+  0.03%                       0x00007fd8e07e17c8: add    $0x2,%esi          ;*iadd
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@72 (line 798)
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1505 (line 778)
+                                                                            ;   {no_reloc}
+  0.03%                       0x00007fd8e07e17cb: mov    $0x31,%r11d
+                              0x00007fd8e07e17d1: mov    $0x30,%r9d
+  0.01%                       0x00007fd8e07e17d7: test   %ebx,%ebx
+                           ╭  0x00007fd8e07e17d9: je     0x00007fd8e07e181d  ;*ifeq
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1452 (line 767)
+  0.01%                    │  0x00007fd8e07e17db: shl    %rax
+  0.03%                    │  0x00007fd8e07e17de: sub    0x20(%rsp),%rax    ;*lsub
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1048 (line 702)
+                           │  0x00007fd8e07e17e3: test   %rax,%rax
+                           │  0x00007fd8e07e17e6: je     0x00007fd8e07e241d  ;*ifne
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1459 (line 768)
+                           │  0x00007fd8e07e17ec: test   %rax,%rax
+                           │  0x00007fd8e07e17ef: jle    0x00007fd8e07e1847  ;*ifle
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1494 (line 774)
+  0.04%                    │  0x00007fd8e07e17f1: cmp    %edi,%edx
+                           │  0x00007fd8e07e17f3: jae    0x00007fd8e07e239d
+  0.08%    0.01%           │  0x00007fd8e07e17f9: movzwl 0xe(%rbp,%rcx,2),%ebx  ;*caload
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@17 (line 790)
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1498 (line 775)
+  0.05%    0.01%           │  0x00007fd8e07e17fe: cmp    $0x39,%ebx
+                           │  0x00007fd8e07e1801: je     0x00007fd8e07e19d8  ;*if_icmpne
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@63 (line 796)
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1498 (line 775)
+                           │  0x00007fd8e07e1807: inc    %ebx               ;*iadd
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@95 (line 804)
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1498 (line 775)
+                           │  0x00007fd8e07e1809: cmp    %edi,%edx
+                           │  0x00007fd8e07e180b: jae    0x00007fd8e07e23b9
+           0.01%           │  0x00007fd8e07e1811: mov    %bx,0x10(%rbp,%rdx,2)  ;*castore
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@97 (line 804)
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1498 (line 775)
+  0.01%    0.03%           │  0x00007fd8e07e1816: movb   $0x1,0x1a(%r8)     ;*putfield decimalDigitsRoundedUp
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@100 (line 805)
+                           │                                                ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1498 (line 775)
+                           │  0x00007fd8e07e181b: jmp    0x00007fd8e07e1847
+  0.01%                    ↘  0x00007fd8e07e181d: cmp    %edi,%edx
+                              0x00007fd8e07e181f: jae    0x00007fd8e07e235d
+                              0x00007fd8e07e1825: movzwl 0xe(%rbp,%rcx,2),%eax  ;*caload
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@17 (line 790)
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1505 (line 778)
+                              0x00007fd8e07e182a: cmp    $0x39,%eax
+                              0x00007fd8e07e182d: je     0x00007fd8e07e18b3  ;*if_icmpne
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@63 (line 796)
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa@1505 (line 778)
+                              0x00007fd8e07e1833: inc    %eax               ;*iadd
+                                                                            ; - sun.misc.FloatingDecimal$BinaryToASCIIBuffer::roundup@95 (line 804)
+....................................................................................................
+ 28.38%   11.67%  <total for region 1>
+
+....[Hottest Region 2]..............................................................................
+ [0x7fd8e07f9668:0x7fd8e07f9d90] in java.text.DecimalFormat::subformat
+
+                           0x00007fd8e07f9668: mov    0x10(%rsp),%rcx
+                           0x00007fd8e07f966d: mov    %eax,%edi
+                  ╭        0x00007fd8e07f966f: jmp    0x00007fd8e07f968f
+                  │        0x00007fd8e07f9671: mov    $0x7,%edx
+                  │        0x00007fd8e07f9676: xor    %edi,%edi
+                  │        0x00007fd8e07f9678: mov    (%rsp),%r13
+                  │        0x00007fd8e07f967c: mov    0x1c(%rsp),%r14d
+                  │        0x00007fd8e07f9681: mov    0x10(%rsp),%rcx
+                  │╭       0x00007fd8e07f9686: jmp    0x00007fd8e07f968f
+                  ││       0x00007fd8e07f9688: mov    $0x7,%edx
+  0.01%           ││       0x00007fd8e07f968d: xor    %edi,%edi          ;*aload_0
+                  ││                                                     ; - java.text.DecimalFormat::subformat@110 (line 1642)
+                  ↘↘       0x00007fd8e07f968f: movzbl 0x44(%r13),%ebp    ;*getfield useExponentialNotation
+                                                                         ; - java.text.DecimalFormat::subformat@111 (line 1642)
+                           0x00007fd8e07f9694: test   %ebp,%ebp
+                           0x00007fd8e07f9696: jne    0x00007fd8e07fc4fd  ;*ifeq
+                                                                         ; - java.text.DecimalFormat::subformat@114 (line 1642)
+  0.01%    0.04%           0x00007fd8e07f969c: mov    (%r10),%rax
+  0.04%                    0x00007fd8e07f969f: mov    %rax,%r11
+                           0x00007fd8e07f96a2: and    $0x7,%r11
+                           0x00007fd8e07f96a6: cmp    $0x5,%r11
+                           0x00007fd8e07f96aa: jne    0x00007fd8e07fad9e
+  0.01%    0.07%           0x00007fd8e07f96b0: mov    0xa8(%rcx),%r11
+           0.01%           0x00007fd8e07f96b7: mov    %r11,%r8
+                           0x00007fd8e07f96ba: or     %r15,%r8
+                           0x00007fd8e07f96bd: mov    %r8,%r9
+           0.05%           0x00007fd8e07f96c0: xor    %rax,%r9
+  0.01%                    0x00007fd8e07f96c3: test   $0xffffffffffffff87,%r9
+                           0x00007fd8e07f96ca: jne    0x00007fd8e07faf68  ;*synchronization entry
+                                                                         ; - java.lang.StringBuffer::length@-1 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@722 (line 1785)
+                           0x00007fd8e07f96d0: mov    0xc(%r10),%r9d
+                           0x00007fd8e07f96d4: mov    $0x7,%r11d
+  0.03%    0.04%           0x00007fd8e07f96da: and    (%r10),%r11
+  0.05%                    0x00007fd8e07f96dd: cmp    $0x5,%r11
+                           0x00007fd8e07f96e1: jne    0x00007fd8e07fae80  ;*ireturn
+                                                                         ; - java.lang.StringBuffer::length@4 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@722 (line 1785)
+                           0x00007fd8e07f96e7: mov    0x50(%r13),%r11d   ;*getfield digitList
+                                                                         ; - java.text.DecimalFormat::subformat@735 (line 1793)
+                           0x00007fd8e07f96eb: mov    0xc(%r12,%r11,8),%r11d  ;*getfield decimalAt
+                                                                         ; - java.text.DecimalFormat::subformat@738 (line 1793)
+                                                                         ; implicit exception: dispatches to 0x00007fd8e07fd1a1
+  0.01%    0.04%           0x00007fd8e07f96f0: test   %r11d,%r11d
+                           0x00007fd8e07f96f3: jle    0x00007fd8e07fc050  ;*ifle
+                                                                         ; - java.text.DecimalFormat::subformat@741 (line 1793)
+  0.05%                    0x00007fd8e07f96f9: mov    0xc0(%rsp),%r8d
+                           0x00007fd8e07f9701: cmp    %r11d,%r8d
+                           0x00007fd8e07f9704: jge    0x00007fd8e07fc53d  ;*if_icmpge
+                                                                         ; - java.text.DecimalFormat::subformat@753 (line 1793)
+  0.03%                    0x00007fd8e07f970a: cmp    0x18(%rsp),%r11d
+                           0x00007fd8e07f970f: jg     0x00007fd8e07fc58d  ;*if_icmple
+                                                                         ; - java.text.DecimalFormat::subformat@769 (line 1801)
+  0.03%    0.03%           0x00007fd8e07f9715: mov    (%r10),%rax
+                           0x00007fd8e07f9718: mov    %rax,%r8
+                           0x00007fd8e07f971b: and    $0x7,%r8
+                           0x00007fd8e07f971f: cmp    $0x5,%r8
+                           0x00007fd8e07f9723: jne    0x00007fd8e07fafa0
+  0.04%    0.01%           0x00007fd8e07f9729: mov    0xa8(%rcx),%r8
+  0.03%                    0x00007fd8e07f9730: mov    %r8,%rbx
+                           0x00007fd8e07f9733: or     %r15,%rbx
+                           0x00007fd8e07f9736: mov    %rbx,%rsi
+  0.01%    0.04%           0x00007fd8e07f9739: xor    %rax,%rsi
+  0.04%                    0x00007fd8e07f973c: test   $0xffffffffffffff87,%rsi
+                           0x00007fd8e07f9743: jne    0x00007fd8e07fb197  ;*synchronization entry
+                                                                         ; - java.lang.StringBuffer::length@-1 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@789 (line 1806)
+                           0x00007fd8e07f9749: mov    0xc(%r10),%ebp
+                           0x00007fd8e07f974d: mov    $0x7,%r8d
+           0.07%           0x00007fd8e07f9753: and    (%r10),%r8
+  0.01%                    0x00007fd8e07f9756: cmp    $0x5,%r8
+                           0x00007fd8e07f975a: jne    0x00007fd8e07fb09d  ;*ireturn
+                                                                         ; - java.lang.StringBuffer::length@4 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@789 (line 1806)
+                           0x00007fd8e07f9760: dec    %r11d              ;*isub
+                                                                         ; - java.text.DecimalFormat::subformat@797 (line 1807)
+                           0x00007fd8e07f9763: test   %r11d,%r11d
+                           0x00007fd8e07f9766: jl     0x00007fd8e07fa2c9  ;*iflt
+                                                                         ; - java.text.DecimalFormat::subformat@802 (line 1807)
+  0.03%    0.01%           0x00007fd8e07f976c: mov    %r11d,0x90(%rsp)
+  0.01%             ╭      0x00007fd8e07f9774: jmp    0x00007fd8e07f97ab
+                    │      0x00007fd8e07f9776: nopw   0x0(%rax,%rax,1)
+  0.03%    0.03%    │↗     0x00007fd8e07f9780: mov    0x4c(%rsp),%r14d
+  0.10%    0.12%    ││     0x00007fd8e07f9785: mov    0x10(%rsp),%rdx
+  0.10%    0.14%    ││     0x00007fd8e07f978a: mov    0x18(%rsp),%rcx
+  0.12%    0.16%    ││     0x00007fd8e07f978f: mov    0xcc(%rsp),%edi
+  0.04%    0.05%    ││     0x00007fd8e07f9796: mov    0x50(%rsp),%r9d
+  0.10%    0.20%    ││     0x00007fd8e07f979b: mov    0x20(%rsp),%r11d
+  0.08%    0.17%    ││     0x00007fd8e07f97a0: mov    0x54(%rsp),%ebp
+  0.12%    0.16%    ││     0x00007fd8e07f97a4: mov    %esi,0x90(%rsp)    ;*iload
+                    ││                                                   ; - java.text.DecimalFormat::subformat@805 (line 1808)
+  0.07%    0.05%    ↘│     0x00007fd8e07f97ab: mov    0x50(%r13),%esi    ;*getfield digitList
+                     │                                                   ; - java.text.DecimalFormat::subformat@808 (line 1808)
+  0.13%    0.10%     │     0x00007fd8e07f97af: mov    0xc(%r12,%rsi,8),%r8d  ;*getfield decimalAt
+                     │                                                   ; - java.text.DecimalFormat::subformat@811 (line 1808)
+                     │                                                   ; implicit exception: dispatches to 0x00007fd8e07fd0e3
+  0.24%    0.28%     │     0x00007fd8e07f97b4: mov    %ebp,0x54(%rsp)
+  0.20%    0.04%     │     0x00007fd8e07f97b8: mov    %r11d,0x20(%rsp)
+           0.07%     │     0x00007fd8e07f97bd: mov    %r9d,0x50(%rsp)
+  0.13%    0.20%     │     0x00007fd8e07f97c2: mov    %edi,0xcc(%rsp)
+  0.18%    0.38%     │     0x00007fd8e07f97c9: mov    %rcx,0x18(%rsp)
+  0.16%    0.21%     │     0x00007fd8e07f97ce: mov    %rdx,0x10(%rsp)
+           0.08%     │     0x00007fd8e07f97d3: mov    %r14d,0x4c(%rsp)
+  0.13%    0.37%     │     0x00007fd8e07f97d8: mov    %r10,0x8(%rsp)
+  0.22%    0.34%     │     0x00007fd8e07f97dd: mov    %r13,(%rsp)
+  0.18%    0.20%     │     0x00007fd8e07f97e1: mov    %r11d,%r9d
+  0.04%    0.05%     │     0x00007fd8e07f97e4: sub    0x90(%rsp),%r9d    ;*iload
+                     │                                                   ; - java.text.DecimalFormat::subformat@805 (line 1808)
+  0.16%    0.25%     │     0x00007fd8e07f97ec: mov    0x90(%rsp),%ebp
+  0.22%    0.22%     │     0x00007fd8e07f97f3: cmp    %r8d,%ebp
+                     │     0x00007fd8e07f97f6: jge    0x00007fd8e07fabd7  ;*if_icmpge
+                     │                                                   ; - java.text.DecimalFormat::subformat@814 (line 1808)
+  0.08%    0.17%     │     0x00007fd8e07f97fc: mov    0x10(%r12,%rsi,8),%r11d  ;*getfield count
+                     │                                                   ; - java.text.DecimalFormat::subformat@823 (line 1808)
+  0.01%    0.08%     │     0x00007fd8e07f9801: cmp    %r11d,%r9d
+                     │     0x00007fd8e07f9804: jge    0x00007fd8e07fac15  ;*if_icmpge
+                     │                                                   ; - java.text.DecimalFormat::subformat@826 (line 1808)
+  0.13%    0.30%     │     0x00007fd8e07f980a: mov    0x18(%r12,%rsi,8),%r11d  ;*getfield digits
+                     │                                                   ; - java.text.DecimalFormat::subformat@834 (line 1810)
+  0.13%    0.30%     │     0x00007fd8e07f980f: mov    0xc(%r12,%r11,8),%r10d  ; implicit exception: dispatches to 0x00007fd8e07fd0f5
+  0.13%    0.18%     │     0x00007fd8e07f9814: mov    %r9d,%ebp
+  0.01%    0.04%     │     0x00007fd8e07f9817: inc    %ebp               ;*iinc
+                     │                                                   ; - java.text.DecimalFormat::subformat@839 (line 1810)
+  0.13%    0.16%     │     0x00007fd8e07f9819: mov    %ebp,0x24(%rsp)
+  0.13%    0.17%     │     0x00007fd8e07f981d: cmp    %r10d,%r9d
+                     │     0x00007fd8e07f9820: jae    0x00007fd8e07fa7cc
+  0.24%    0.38%     │     0x00007fd8e07f9826: mov    0x8(%rsp),%r10
+  0.04%    0.01%     │     0x00007fd8e07f982b: mov    (%r10),%rax
+  0.93%    1.96%     │     0x00007fd8e07f982e: lea    (%r12,%r11,8),%r10
+  0.05%    0.03%     │     0x00007fd8e07f9832: movzwl 0x10(%r10,%r9,2),%ebp  ;*caload
+                     │                                                   ; - java.text.DecimalFormat::subformat@842 (line 1810)
+  0.18%    0.17%     │     0x00007fd8e07f9838: add    0x40(%rsp),%ebp
+  0.09%    0.26%     │     0x00007fd8e07f983c: mov    %rax,%r10
+  0.21%    0.45%     │     0x00007fd8e07f983f: and    $0x7,%r10
+           0.04%     │     0x00007fd8e07f9843: add    $0xffffffffffffffd0,%ebp  ;*iadd
+                     │                                                   ; - java.text.DecimalFormat::subformat@845 (line 1810)
+  0.10%    0.25%     │     0x00007fd8e07f9846: mov    %ebp,0x28(%rsp)
+  0.14%    0.28%     │     0x00007fd8e07f984a: movzwl %bp,%ebp           ;*i2c  ; - java.text.DecimalFormat::subformat@846 (line 1810)
+  0.24%    0.38%     │     0x00007fd8e07f984d: mov    %ebp,0x5c(%rsp)
+  0.12%    0.25%     │     0x00007fd8e07f9851: cmp    $0x5,%r10
+                     │     0x00007fd8e07f9855: jne    0x00007fd8e07fa89b
+  0.01%    0.01%     │     0x00007fd8e07f985b: mov    0xa8(%rcx),%r10
+           0.04%     │     0x00007fd8e07f9862: mov    %r10,%r11
+  0.18%    0.60%     │     0x00007fd8e07f9865: or     %r15,%r11
+  0.20%    0.29%     │     0x00007fd8e07f9868: mov    %r11,%r8
+  0.04%    0.03%     │     0x00007fd8e07f986b: xor    %rax,%r8
+  0.01%    0.05%     │     0x00007fd8e07f986e: test   $0xffffffffffffff87,%r8
+                     │     0x00007fd8e07f9875: jne    0x00007fd8e07fa911  ;*synchronization entry
+                     │                                                   ; - java.lang.StringBuffer::append@-1 (line 382)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.24%    0.51%     │     0x00007fd8e07f987b: mov    0x8(%rsp),%r10
+  0.13%    0.31%     │     0x00007fd8e07f9880: mov    0x10(%r10),%ebx    ;*getfield value
+                     │                                                   ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@2 (line 120)
+                     │                                                   ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     │                                                   ; - java.lang.StringBuffer::append@7 (line 383)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.04%    0.07%     │     0x00007fd8e07f9884: mov    %r12d,0x14(%r10)   ;*putfield toStringCache
+                     │                                                   ; - java.lang.StringBuffer::append@2 (line 382)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.03%    0.03%     │     0x00007fd8e07f9888: mov    0xc(%r12,%rbx,8),%ebp  ;*arraylength
+                     │                                                   ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@5 (line 120)
+                     │                                                   ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     │                                                   ; - java.lang.StringBuffer::append@7 (line 383)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+                     │                                                   ; implicit exception: dispatches to 0x00007fd8e07fd109
+  0.54%    1.13%     │     0x00007fd8e07f988d: mov    0xc(%r10),%r10d    ;*getfield count
+                     │                                                   ; - java.lang.AbstractStringBuilder::append@2 (line 622)
+                     │                                                   ; - java.lang.StringBuffer::append@7 (line 383)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.09%    0.09%     │     0x00007fd8e07f9891: mov    %r10d,%r11d
+  0.04%    0.07%     │     0x00007fd8e07f9894: sub    %ebp,%r11d
+  0.59%    0.88%     │     0x00007fd8e07f9897: mov    %rbx,%r8
+  0.03%    0.12%     │     0x00007fd8e07f989a: shl    $0x3,%r8           ;*getfield value
+                     │                                                   ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@2 (line 120)
+                     │                                                   ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     │                                                   ; - java.lang.StringBuffer::append@7 (line 383)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.05%    0.16%     │     0x00007fd8e07f989e: inc    %r11d
+  0.22%    0.43%     │     0x00007fd8e07f98a1: mov    %r10d,%r9d
+  0.03%    0.05%     │     0x00007fd8e07f98a4: inc    %r9d               ;*iadd
+                     │                                                   ; - java.lang.AbstractStringBuilder::append@6 (line 622)
+                     │                                                   ; - java.lang.StringBuffer::append@7 (line 383)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.05%    0.07%     │     0x00007fd8e07f98a7: test   %r11d,%r11d
+                     │     0x00007fd8e07f98aa: jg     0x00007fd8e07f9fe2  ;*ifle
+                     │                                                   ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@7 (line 120)
+                     │                                                   ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     │                                                   ; - java.lang.StringBuffer::append@7 (line 383)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.34%    0.81%     │     0x00007fd8e07f98b0: mov    0x8(%rsp),%r11
+  0.01%    0.10%     │     0x00007fd8e07f98b5: mov    %r9d,0xc(%r11)     ;*return
+                     │                                                   ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@15 (line 122)
+                     │                                                   ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                     │                                                   ; - java.lang.StringBuffer::append@7 (line 383)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.01%    0.05%     │     0x00007fd8e07f98b9: mov    0xc(%r8),%r9d
+  0.01%    0.13%     │     0x00007fd8e07f98bd: cmp    %r9d,%r10d
+  0.17%    0.34%     │     0x00007fd8e07f98c0: jae    0x00007fd8e07fa821
+  0.20%    0.35%     │     0x00007fd8e07f98c6: mov    0x28(%rsp),%ebp
+  0.03%    0.07%     │     0x00007fd8e07f98ca: mov    %bp,0x10(%r8,%r10,2)
+  0.10%    0.16%     │     0x00007fd8e07f98d0: mov    $0x7,%r10d
+  0.14%    0.33%     │     0x00007fd8e07f98d6: mov    0x8(%rsp),%r11
+  0.20%    0.24%     │     0x00007fd8e07f98db: and    (%r11),%r10
+  0.05%    0.12%     │     0x00007fd8e07f98de: cmp    $0x5,%r10
+                     │     0x00007fd8e07f98e2: jne    0x00007fd8e07fa945
+  0.05%    0.12%     │     0x00007fd8e07f98e8: mov    %r11,%r10          ;*areturn
+                     │                                                   ; - java.lang.StringBuffer::append@12 (line 384)
+                     │                                                   ; - java.text.DecimalFormat::subformat@847 (line 1810)
+  0.24%    0.18%     │     0x00007fd8e07f98eb: mov    (%rsp),%r13
+  0.17%    0.34%     │     0x00007fd8e07f98ef: movzbl 0x20(%r13),%r8d    ;*getfield groupingUsed
+                     │                                                   ; - java.text.NumberFormat::isGroupingUsed@1 (line 648)
+                     │                                                   ; - java.text.DecimalFormat::subformat@862 (line 1819)
+  0.03%    0.03%     │     0x00007fd8e07f98f4: test   %r8d,%r8d
+                     │     0x00007fd8e07f98f7: jne    0x00007fd8e07fac55  ;*ifeq
+                     │                                                   ; - java.text.DecimalFormat::subformat@865 (line 1819)
+  0.10%    0.13%     │     0x00007fd8e07f98fd: mov    0x90(%rsp),%esi
+  0.17%    0.20%     │     0x00007fd8e07f9904: dec    %esi               ;*iinc
+                     │                                                   ; - java.text.DecimalFormat::subformat@922 (line 1807)
+  0.18%    0.37%     │     0x00007fd8e07f9906: cmp    $0xffffffffffffffff,%esi
+                     ╰     0x00007fd8e07f9909: jg     0x00007fd8e07f9780
+                           0x00007fd8e07f990f: mov    0x10(%rsp),%rdx
+  0.07%    0.14%           0x00007fd8e07f9914: mov    0x18(%rsp),%rcx
+  0.04%    0.03%           0x00007fd8e07f9919: mov    0xcc(%rsp),%edi
+                           0x00007fd8e07f9920: mov    0x50(%rsp),%r9d
+                           0x00007fd8e07f9925: mov    0x54(%rsp),%ebp
+  0.01%                    0x00007fd8e07f9929: mov    0x24(%rsp),%r11d   ;*iflt
+                                                                         ; - java.text.DecimalFormat::subformat@802 (line 1807)
+  0.05%    0.03%           0x00007fd8e07f992e: mov    0xd0(%rsp),%r14d
+                           0x00007fd8e07f9936: test   %r14d,%r14d
+                           0x00007fd8e07f9939: jle    0x00007fd8e07fc5c9  ;*ifgt
+                                                                         ; - java.text.DecimalFormat::subformat@930 (line 1831)
+  0.01%                    0x00007fd8e07f993f: mov    (%r10),%rax
+           0.04%           0x00007fd8e07f9942: mov    %rax,%r8
+  0.05%    0.01%           0x00007fd8e07f9945: and    $0x7,%r8
+                           0x00007fd8e07f9949: cmp    $0x5,%r8
+                           0x00007fd8e07f994d: jne    0x00007fd8e07fb1cf
+           0.01%           0x00007fd8e07f9953: mov    0xa8(%rcx),%r8
+  0.01%    0.01%           0x00007fd8e07f995a: mov    %r8,%rbx
+  0.01%    0.05%           0x00007fd8e07f995d: or     %r15,%rbx
+  0.01%    0.03%           0x00007fd8e07f9960: mov    %rbx,%rsi
+                           0x00007fd8e07f9963: xor    %rax,%rsi
+           0.01%           0x00007fd8e07f9966: test   $0xffffffffffffff87,%rsi
+                           0x00007fd8e07f996d: jne    0x00007fd8e07fb431  ;*synchronization entry
+                                                                         ; - java.lang.StringBuffer::length@-1 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@989 (line 1842)
+  0.05%    0.01%           0x00007fd8e07f9973: mov    0xc(%r10),%ebp
+                           0x00007fd8e07f9977: mov    $0x7,%r8d
+                           0x00007fd8e07f997d: and    (%r10),%r8
+           0.03%           0x00007fd8e07f9980: cmp    $0x5,%r8
+                           0x00007fd8e07f9984: jne    0x00007fd8e07fb2ed  ;*ireturn
+                                                                         ; - java.lang.StringBuffer::length@4 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@989 (line 1842)
+  0.08%    0.05%           0x00007fd8e07f998a: mov    0x38(%rsp),%r8
+           0.01%           0x00007fd8e07f998f: mov    0x8(%r8),%esi      ; implicit exception: dispatches to 0x00007fd8e07fd1b1
+           0.01%           0x00007fd8e07f9993: cmp    $0xf801a5b0,%esi   ;   {metadata(&apos;java/text/DontCareFieldPosition$1&apos;)}
+                           0x00007fd8e07f9999: jne    0x00007fd8e07fb3e9
+  0.03%                    0x00007fd8e07f999f: mov    %r8,%r9            ;*invokeinterface formatted
+                                                                         ; - java.text.DecimalFormat::subformat@993 (line 1841)
+  0.05%                    0x00007fd8e07f99a2: mov    (%r10),%rax
+                           0x00007fd8e07f99a5: mov    %rax,%r8
+                           0x00007fd8e07f99a8: and    $0x7,%r8
+  0.01%                    0x00007fd8e07f99ac: cmp    $0x5,%r8
+                           0x00007fd8e07f99b0: jne    0x00007fd8e07fb469
+  0.07%    0.05%           0x00007fd8e07f99b6: mov    0xa8(%rcx),%r8
+                           0x00007fd8e07f99bd: mov    %r8,%rbx
+                           0x00007fd8e07f99c0: or     %r15,%rbx
+           0.01%           0x00007fd8e07f99c3: mov    %rbx,%rsi
+  0.03%    0.08%           0x00007fd8e07f99c6: xor    %rax,%rsi
+                           0x00007fd8e07f99c9: test   $0xffffffffffffff87,%rsi
+                           0x00007fd8e07f99d0: jne    0x00007fd8e07fb76c  ;*synchronization entry
+                                                                         ; - java.lang.StringBuffer::length@-1 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@999 (line 1845)
+  0.01%                    0x00007fd8e07f99d6: mov    0xc(%r10),%r8d
+           0.03%           0x00007fd8e07f99da: mov    $0x7,%ebx
+  0.05%    0.07%           0x00007fd8e07f99df: and    (%r10),%rbx
+  0.01%    0.01%           0x00007fd8e07f99e2: cmp    $0x5,%rbx
+                           0x00007fd8e07f99e6: jne    0x00007fd8e07fb55a  ;*ireturn
+                                                                         ; - java.lang.StringBuffer::length@4 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@999 (line 1845)
+  0.01%                    0x00007fd8e07f99ec: movzbl 0x41(%r13),%ebp    ;*getfield decimalSeparatorAlwaysShown
+                                                                         ; - java.text.DecimalFormat::subformat@1005 (line 1846)
+           0.01%           0x00007fd8e07f99f1: test   %ebp,%ebp
+                           0x00007fd8e07f99f3: jne    0x00007fd8e07fc099  ;*ifne
+                                                                         ; - java.text.DecimalFormat::subformat@1008 (line 1846)
+  0.01%    0.12%           0x00007fd8e07f99f9: mov    (%r10),%rax
+                           0x00007fd8e07f99fc: mov    %rax,%rbx
+  0.01%                    0x00007fd8e07f99ff: and    $0x7,%rbx
+                           0x00007fd8e07f9a03: cmp    $0x5,%rbx
+                           0x00007fd8e07f9a07: jne    0x00007fd8e07fb659
+  0.01%    0.12%           0x00007fd8e07f9a0d: mov    0xa8(%rcx),%rbx
+  0.01%                    0x00007fd8e07f9a14: mov    %rbx,%rsi
+                           0x00007fd8e07f9a17: or     %r15,%rsi
+                           0x00007fd8e07f9a1a: mov    %rsi,%rbp
+  0.04%    0.08%           0x00007fd8e07f9a1d: xor    %rax,%rbp
+                           0x00007fd8e07f9a20: test   $0xffffffffffffff87,%rbp
+                           0x00007fd8e07f9a27: jne    0x00007fd8e07fb79f  ;*synchronization entry
+                                                                         ; - java.lang.StringBuffer::append@-1 (line 382)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+           0.01%           0x00007fd8e07f9a2d: mov    0x10(%r10),%esi    ;*getfield value
+                                                                         ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@2 (line 120)
+                                                                         ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                                                                         ; - java.lang.StringBuffer::append@7 (line 383)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+                           0x00007fd8e07f9a31: mov    %esi,0x4c(%rsp)
+  0.05%    0.10%           0x00007fd8e07f9a35: mov    %r12d,0x14(%r10)   ;*putfield toStringCache
+                                                                         ; - java.lang.StringBuffer::append@2 (line 382)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+           0.01%           0x00007fd8e07f9a39: mov    0xc(%r12,%rsi,8),%ebp  ;*arraylength
+                                                                         ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@5 (line 120)
+                                                                         ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                                                                         ; - java.lang.StringBuffer::append@7 (line 383)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+                                                                         ; implicit exception: dispatches to 0x00007fd8e07fd1d1
+  0.01%    0.01%           0x00007fd8e07f9a3e: mov    %r8d,0x28(%rsp)
+           0.01%           0x00007fd8e07f9a43: mov    %r9,0x38(%rsp)
+  0.04%    0.05%           0x00007fd8e07f9a48: mov    %r11d,0x18(%rsp)
+  0.01%                    0x00007fd8e07f9a4d: mov    %edi,0xd0(%rsp)
+                           0x00007fd8e07f9a54: mov    %rcx,0x10(%rsp)
+  0.01%    0.01%           0x00007fd8e07f9a59: mov    %rdx,0x8(%rsp)
+  0.01%    0.13%           0x00007fd8e07f9a5e: mov    %r14d,0xcc(%rsp)
+  0.01%    0.01%           0x00007fd8e07f9a66: mov    %r13,(%rsp)
+                           0x00007fd8e07f9a6a: mov    0xc(%r10),%r8d     ;*getfield count
+                                                                         ; - java.lang.AbstractStringBuilder::append@2 (line 622)
+                                                                         ; - java.lang.StringBuffer::append@7 (line 383)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+  0.01%    0.01%           0x00007fd8e07f9a6e: mov    %r10,0xc0(%rsp)
+  0.03%    0.08%           0x00007fd8e07f9a76: mov    %r8d,%r11d
+  0.01%    0.01%           0x00007fd8e07f9a79: sub    %ebp,%r8d
+                           0x00007fd8e07f9a7c: mov    %rsi,%rcx
+                           0x00007fd8e07f9a7f: shl    $0x3,%rcx          ;*getfield value
+                                                                         ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@2 (line 120)
+                                                                         ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                                                                         ; - java.lang.StringBuffer::append@7 (line 383)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+  0.08%    0.07%           0x00007fd8e07f9a83: inc    %r8d
+           0.01%           0x00007fd8e07f9a86: mov    %r11d,%r9d
+                           0x00007fd8e07f9a89: inc    %r9d               ;*iadd
+                                                                         ; - java.lang.AbstractStringBuilder::append@6 (line 622)
+                                                                         ; - java.lang.StringBuffer::append@7 (line 383)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+           0.03%           0x00007fd8e07f9a8c: test   %r8d,%r8d
+                           0x00007fd8e07f9a8f: jg     0x00007fd8e07fa2d1  ;*ifle
+                                                                         ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@7 (line 120)
+                                                                         ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                                                                         ; - java.lang.StringBuffer::append@7 (line 383)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+  0.03%    0.16%           0x00007fd8e07f9a95: mov    0xc0(%rsp),%r13
+  0.03%    0.04%           0x00007fd8e07f9a9d: mov    %r9d,%r8d          ;*return
+                                                                         ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@15 (line 122)
+                                                                         ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                                                                         ; - java.lang.StringBuffer::append@7 (line 383)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+                           0x00007fd8e07f9aa0: mov    %r8d,0xc(%r13)     ;*putfield count
+                                                                         ; - java.lang.AbstractStringBuilder::append@22 (line 623)
+                                                                         ; - java.lang.StringBuffer::append@7 (line 383)
+                                                                         ; - java.text.DecimalFormat::subformat@1019 (line 1847)
+  0.16%    0.20%           0x00007fd8e07f9aa4: mov    0xc(%rcx),%r10d    ; implicit exception: dispatches to 0x00007fd8e07fd1e5
+  0.01%    0.03%           0x00007fd8e07f9aa8: cmp    %r10d,%r11d
+                           0x00007fd8e07f9aab: jae    0x00007fd8e07fad3d
+                           0x00007fd8e07f9ab1: mov    0x48(%rsp),%r10d
+                           0x00007fd8e07f9ab6: mov    %r10w,0x10(%rcx,%r11,2)
+  0.01%    0.08%           0x00007fd8e07f9abc: mov    $0x7,%r10d
+  0.03%                    0x00007fd8e07f9ac2: and    0x0(%r13),%r10
+  0.01%    0.03%           0x00007fd8e07f9ac6: cmp    $0x5,%r10
+                           0x00007fd8e07f9aca: jne    0x00007fd8e07fb7d2  ;*ireturn
+                                                                         ; - java.lang.StringBuffer::length@4 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@1026 (line 1850)
+  0.01%    0.08%           0x00007fd8e07f9ad0: mov    0x28(%rsp),%r9d
+           0.01%           0x00007fd8e07f9ad5: cmp    %r8d,%r9d
+                           0x00007fd8e07f9ad8: je     0x00007fd8e07fc5f5  ;*if_icmpeq
+                                                                         ; - java.text.DecimalFormat::subformat@1029 (line 1850)
+           0.01%           0x00007fd8e07f9ade: mov    0x0(%r13),%rax
+                           0x00007fd8e07f9ae2: mov    %rax,%r10
+  0.04%    0.03%           0x00007fd8e07f9ae5: and    $0x7,%r10
+  0.03%    0.03%           0x00007fd8e07f9ae9: cmp    $0x5,%r10
+                           0x00007fd8e07f9aed: jne    0x00007fd8e07fb886
+  0.03%    0.01%           0x00007fd8e07f9af3: mov    0x10(%rsp),%r14
+                           0x00007fd8e07f9af8: mov    0xa8(%r14),%r10
+  0.04%    0.09%           0x00007fd8e07f9aff: mov    %r10,%r11
+  0.01%    0.03%           0x00007fd8e07f9b02: or     %r15,%r11
+           0.04%           0x00007fd8e07f9b05: mov    %r11,%r8
+                           0x00007fd8e07f9b08: xor    %rax,%r8
+  0.03%    0.09%           0x00007fd8e07f9b0b: test   $0xffffffffffffff87,%r8
+                           0x00007fd8e07f9b12: jne    0x00007fd8e07fb8ea  ;*synchronization entry
+                                                                         ; - java.lang.StringBuffer::length@-1 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@1042 (line 1853)
+           0.04%           0x00007fd8e07f9b18: mov    0xc(%r13),%r11d
+  0.05%    0.01%           0x00007fd8e07f9b1c: mov    $0x7,%r10d
+                           0x00007fd8e07f9b22: and    0x0(%r13),%r10
+           0.04%           0x00007fd8e07f9b26: cmp    $0x5,%r10
+                           0x00007fd8e07f9b2a: jne    0x00007fd8e07fb949  ;*ireturn
+                                                                         ; - java.lang.StringBuffer::length@4 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@1052 (line 1855)
+           0.03%           0x00007fd8e07f9b30: mov    0xc8(%rsp),%ecx
+           0.04%           0x00007fd8e07f9b37: test   %ecx,%ecx
+                           0x00007fd8e07f9b39: jle    0x00007fd8e07fa69f  ;*if_icmpge
+                                                                         ; - java.text.DecimalFormat::subformat@1064 (line 1857)
+                           0x00007fd8e07f9b3f: mov    0x34(%rsp),%ebx
+  0.01%    0.01%           0x00007fd8e07f9b43: test   %ebx,%ebx
+                           0x00007fd8e07f9b45: jne    0x00007fd8e07fbb8b  ;*iload
+                                                                         ; - java.text.DecimalFormat::subformat@1067 (line 1864)
+           0.01%           0x00007fd8e07f9b4b: xor    %r9d,%r9d
+  0.04%    0.03%      ╭    0x00007fd8e07f9b4e: jmpq   0x00007fd8e07f9ca5
+                      │    0x00007fd8e07f9b53: nopw   0x0(%rax,%rax,1)
+                      │    0x00007fd8e07f9b5c: xchg   %ax,%ax            ;*iconst_m1
+                      │                                                  ; - java.text.DecimalFormat::subformat@1094 (line 1872)
+  0.20%    0.38%      │↗↗  0x00007fd8e07f9b60: mov    0xc(%r12,%rdx,8),%r10d  ; implicit exception: dispatches to 0x00007fd8e07fd11d
+  0.07%    0.14%      │││  0x00007fd8e07f9b65: mov    $0xffffffff,%edi
+  0.05%    0.04%      │││  0x00007fd8e07f9b6a: sub    %r9d,%edi          ;*isub
+                      │││                                                ; - java.text.DecimalFormat::subformat@1097 (line 1872)
+  0.01%               │││  0x00007fd8e07f9b6d: dec    %r10d              ;*isub
+                      │││                                                ; - java.text.DecimalFormat::subformat@1106 (line 1872)
+  0.29%    0.42%      │││  0x00007fd8e07f9b70: cmp    %r10d,%edi
+                      │││  0x00007fd8e07f9b73: jg     0x00007fd8e07fac8d  ;*if_icmple
+                      │││                                                ; - java.text.DecimalFormat::subformat@1107 (line 1872)
+  0.10%    0.08%      │││  0x00007fd8e07f9b79: mov    0x10(%r12,%rdx,8),%r10d  ;*getfield count
+                      │││                                                ; - java.text.DecimalFormat::subformat@1131 (line 1879)
+  0.08%    0.08%      │││  0x00007fd8e07f9b7e: cmp    %r10d,%r8d
+                      │││  0x00007fd8e07f9b81: jge    0x00007fd8e07facc9  ;*if_icmpge
+                      │││                                                ; - java.text.DecimalFormat::subformat@1134 (line 1879)
+  0.13%    0.37%      │││  0x00007fd8e07f9b87: mov    0x18(%r12,%rdx,8),%edx  ;*getfield digits
+                      │││                                                ; - java.text.DecimalFormat::subformat@1142 (line 1880)
+  0.07%    0.14%      │││  0x00007fd8e07f9b8c: mov    0xc(%r12,%rdx,8),%r10d  ; implicit exception: dispatches to 0x00007fd8e07fd12d
+  0.84%    1.06%      │││  0x00007fd8e07f9b91: mov    %r8d,%edi
+           0.03%      │││  0x00007fd8e07f9b94: inc    %edi               ;*iinc
+                      │││                                                ; - java.text.DecimalFormat::subformat@1147 (line 1880)
+                      │││  0x00007fd8e07f9b96: cmp    %r10d,%r8d
+                      │││  0x00007fd8e07f9b99: jae    0x00007fd8e07fa9fc
+  0.31%    0.52%      │││  0x00007fd8e07f9b9f: mov    %edi,0x2c(%rsp)
+  0.01%               │││  0x00007fd8e07f9ba3: mov    %r9d,0x28(%rsp)
+  0.04%    0.01%      │││  0x00007fd8e07f9ba8: mov    %r11d,0x34(%rsp)
+                      │││  0x00007fd8e07f9bad: mov    %r14,0x20(%rsp)
+  0.25%    0.42%      │││  0x00007fd8e07f9bb2: mov    %ecx,0x1c(%rsp)
+           0.03%      │││  0x00007fd8e07f9bb6: mov    %ebx,0xc8(%rsp)
+           0.01%      │││  0x00007fd8e07f9bbd: mov    0x0(%r13),%rax
+           0.03%      │││  0x00007fd8e07f9bc1: mov    %r13,0x10(%rsp)
+  0.22%    0.50%      │││  0x00007fd8e07f9bc6: lea    (%r12,%rdx,8),%r10
+  0.01%    0.03%      │││  0x00007fd8e07f9bca: movzwl 0x10(%r10,%r8,2),%ebp  ;*caload
+                      │││                                                ; - java.text.DecimalFormat::subformat@1150 (line 1880)
+  0.14%    0.21%      │││  0x00007fd8e07f9bd0: add    0x40(%rsp),%ebp
+  0.08%    0.10%      │││  0x00007fd8e07f9bd4: mov    %rax,%r10
+  0.30%    0.47%      │││  0x00007fd8e07f9bd7: and    $0x7,%r10
+           0.01%      │││  0x00007fd8e07f9bdb: add    $0xffffffffffffffd0,%ebp  ;*iadd
+                      │││                                                ; - java.text.DecimalFormat::subformat@1153 (line 1880)
+  0.04%    0.04%      │││  0x00007fd8e07f9bde: mov    %ebp,0x48(%rsp)
+  0.29%    0.55%      │││  0x00007fd8e07f9be2: movzwl %bp,%ebp           ;*i2c  ; - java.text.DecimalFormat::subformat@1154 (line 1880)
+  0.01%    0.05%      │││  0x00007fd8e07f9be5: mov    %ebp,0x60(%rsp)
+  0.35%    0.49%      │││  0x00007fd8e07f9be9: cmp    $0x5,%r10
+                      │││  0x00007fd8e07f9bed: jne    0x00007fd8e07faa8b
+  0.01%               │││  0x00007fd8e07f9bf3: mov    0xa8(%r14),%r10
+  0.01%    0.01%      │││  0x00007fd8e07f9bfa: mov    %r10,%r11
+  0.03%    0.07%      │││  0x00007fd8e07f9bfd: or     %r15,%r11
+  0.27%    0.45%      │││  0x00007fd8e07f9c00: mov    %r11,%r8
+           0.01%      │││  0x00007fd8e07f9c03: xor    %rax,%r8
+                      │││  0x00007fd8e07f9c06: test   $0xffffffffffffff87,%r8
+                      │││  0x00007fd8e07f9c0d: jne    0x00007fd8e07faaf9  ;*synchronization entry
+                      │││                                                ; - java.lang.StringBuffer::append@-1 (line 382)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+  0.05%    0.01%      │││  0x00007fd8e07f9c13: mov    0x10(%rsp),%r10
+  0.35%    0.79%      │││  0x00007fd8e07f9c18: mov    0x10(%r10),%r11d   ;*getfield value
+                      │││                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@2 (line 120)
+                      │││                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                      │││                                                ; - java.lang.StringBuffer::append@7 (line 383)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+  0.01%               │││  0x00007fd8e07f9c1c: mov    %r12d,0x14(%r10)   ;*putfield toStringCache
+                      │││                                                ; - java.lang.StringBuffer::append@2 (line 382)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+  0.03%    0.03%      │││  0x00007fd8e07f9c20: mov    0xc(%r12,%r11,8),%ebp  ;*arraylength
+                      │││                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@5 (line 120)
+                      │││                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                      │││                                                ; - java.lang.StringBuffer::append@7 (line 383)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+                      │││                                                ; implicit exception: dispatches to 0x00007fd8e07fd141
+  0.39%    0.68%      │││  0x00007fd8e07f9c25: mov    0xc(%r10),%r8d     ;*getfield count
+                      │││                                                ; - java.lang.AbstractStringBuilder::append@2 (line 622)
+                      │││                                                ; - java.lang.StringBuffer::append@7 (line 383)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+  0.22%    0.30%      │││  0x00007fd8e07f9c29: mov    %r8d,%ebx
+  0.01%               │││  0x00007fd8e07f9c2c: sub    %ebp,%ebx
+  0.21%    0.52%      │││  0x00007fd8e07f9c2e: mov    %r11,%r9
+                      │││  0x00007fd8e07f9c31: shl    $0x3,%r9           ;*getfield value
+                      │││                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@2 (line 120)
+                      │││                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                      │││                                                ; - java.lang.StringBuffer::append@7 (line 383)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+  0.17%    0.41%      │││  0x00007fd8e07f9c35: inc    %ebx
+  0.17%    0.24%      │││  0x00007fd8e07f9c37: mov    %r8d,%ecx
+                      │││  0x00007fd8e07f9c3a: inc    %ecx               ;*iadd
+                      │││                                                ; - java.lang.AbstractStringBuilder::append@6 (line 622)
+                      │││                                                ; - java.lang.StringBuffer::append@7 (line 383)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+           0.05%      │││  0x00007fd8e07f9c3c: test   %ebx,%ebx
+                      │││  0x00007fd8e07f9c3e: jg     0x00007fd8e07fa164  ;*return
+                      │││                                                ; - java.lang.AbstractStringBuilder::ensureCapacityInternal@15 (line 122)
+                      │││                                                ; - java.lang.AbstractStringBuilder::append@7 (line 622)
+                      │││                                                ; - java.lang.StringBuffer::append@7 (line 383)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+  0.25%    0.50%      │││  0x00007fd8e07f9c44: mov    0x10(%rsp),%r10
+  0.01%    0.01%      │││  0x00007fd8e07f9c49: mov    %ecx,0xc(%r10)     ;*putfield count
+                      │││                                                ; - java.lang.AbstractStringBuilder::append@22 (line 623)
+                      │││                                                ; - java.lang.StringBuffer::append@7 (line 383)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+  0.13%    0.07%      │││  0x00007fd8e07f9c4d: mov    0xc(%r9),%r10d     ; implicit exception: dispatches to 0x00007fd8e07fd155
+  0.04%    0.12%      │││  0x00007fd8e07f9c51: cmp    %r10d,%r8d
+                      │││  0x00007fd8e07f9c54: jae    0x00007fd8e07faa2d
+  0.26%    0.38%      │││  0x00007fd8e07f9c5a: mov    0x48(%rsp),%ebp
+                      │││  0x00007fd8e07f9c5e: mov    %bp,0x10(%r9,%r8,2)
+  0.22%    0.17%      │││  0x00007fd8e07f9c64: mov    $0x7,%r10d
+  0.01%    0.04%      │││  0x00007fd8e07f9c6a: mov    0x10(%rsp),%r13
+  0.29%    0.50%      │││  0x00007fd8e07f9c6f: and    0x0(%r13),%r10
+  0.04%    0.03%      │││  0x00007fd8e07f9c73: cmp    $0x5,%r10
+                      │││  0x00007fd8e07f9c77: jne    0x00007fd8e07fab29  ;*areturn
+                      │││                                                ; - java.lang.StringBuffer::append@12 (line 384)
+                      │││                                                ; - java.text.DecimalFormat::subformat@1155 (line 1880)
+  0.12%    0.14%      │││  0x00007fd8e07f9c7d: mov    0x28(%rsp),%r9d
+           0.03%      │││  0x00007fd8e07f9c82: inc    %r9d               ;*iinc
+                      │││                                                ; - java.text.DecimalFormat::subformat@1169 (line 1857)
+  0.20%    0.41%      │││  0x00007fd8e07f9c85: cmp    0x1c(%rsp),%r9d
+                      │││  0x00007fd8e07f9c8a: jge    0x00007fd8e07fa5f3  ;*if_icmpge
+                      │││                                                ; - java.text.DecimalFormat::subformat@1064 (line 1857)
+                      │││  0x00007fd8e07f9c90: mov    0xc8(%rsp),%ebx
+  0.13%    0.05%      │││  0x00007fd8e07f9c97: mov    0x1c(%rsp),%ecx
+  0.03%               │││  0x00007fd8e07f9c9b: mov    0x20(%rsp),%r14
+  0.26%    0.38%      │││  0x00007fd8e07f9ca0: mov    0x34(%rsp),%r11d   ;*iload
+                      │││                                                ; - java.text.DecimalFormat::subformat@1067 (line 1864)
+  0.01%    0.03%      ↘││  0x00007fd8e07f9ca5: mov    (%rsp),%rbp
+  0.09%    0.12%       ││  0x00007fd8e07f9ca9: mov    0x50(%rbp),%edx    ;*getfield digitList
+                       ││                                                ; - java.text.DecimalFormat::subformat@1082 (line 1864)
+  0.03%    0.04%       ││  0x00007fd8e07f9cac: mov    %r9d,%r8d
+  0.17%    0.17%       ││  0x00007fd8e07f9caf: add    0x18(%rsp),%r8d    ;*iload
+                       ││                                                ; - java.text.DecimalFormat::subformat@1067 (line 1864)
+           0.01%       ││  0x00007fd8e07f9cb4: cmp    0xcc(%rsp),%r9d
+                       ╰│  0x00007fd8e07f9cbc: jl     0x00007fd8e07f9b60  ;*if_icmplt
+                        │                                                ; - java.text.DecimalFormat::subformat@1071 (line 1864)
+  0.10%    0.08%        │  0x00007fd8e07f9cc2: mov    0x10(%r12,%rdx,8),%r10d  ; implicit exception: dispatches to 0x00007fd8e07fd171
+  0.24%    0.20%        │  0x00007fd8e07f9cc7: cmp    %r10d,%r8d
+                        ╰  0x00007fd8e07f9cca: jl     0x00007fd8e07f9b60  ;*goto
+                                                                         ; - java.text.DecimalFormat::subformat@1091 (line 1866)
+  0.03%    0.05%           0x00007fd8e07f9cd0: mov    0x0(%r13),%rax
+  0.01%    0.01%           0x00007fd8e07f9cd4: mov    %rax,%r10
+           0.04%           0x00007fd8e07f9cd7: and    $0x7,%r10
+                           0x00007fd8e07f9cdb: cmp    $0x5,%r10
+                           0x00007fd8e07f9cdf: jne    0x00007fd8e07fba0d
+  0.04%    0.03%           0x00007fd8e07f9ce5: mov    0xa8(%r14),%r10
+           0.01%           0x00007fd8e07f9cec: mov    %r10,%r8
+  0.03%    0.01%           0x00007fd8e07f9cef: or     %r15,%r8
+           0.01%           0x00007fd8e07f9cf2: mov    %r8,%r9
+  0.03%    0.04%           0x00007fd8e07f9cf5: xor    %rax,%r9
+                           0x00007fd8e07f9cf8: test   $0xffffffffffffff87,%r9
+                           0x00007fd8e07f9cff: jne    0x00007fd8e07fbb57
+                           0x00007fd8e07f9d05: mov    $0x7,%r10d
+           0.01%           0x00007fd8e07f9d0b: and    0x0(%r13),%r10
+  0.04%    0.01%           0x00007fd8e07f9d0f: cmp    $0x5,%r10
+                           0x00007fd8e07f9d13: jne    0x00007fd8e07fbaa9  ;*ireturn
+                                                                         ; - java.lang.StringBuffer::length@4 (line 163)
+                                                                         ; - java.text.DecimalFormat::subformat@1186 (line 1888)
+                           0x00007fd8e07f9d19: mov    0xa8(%r14),%rcx
+           0.04%           0x00007fd8e07f9d20: mov    0x30(%rsp),%r11d
+                           0x00007fd8e07f9d25: test   %r11d,%r11d
+                           0x00007fd8e07f9d28: je     0x00007fd8e07f9e81  ;*ifeq
+                                                                         ; - java.text.DecimalFormat::subformat@1196 (line 1891)
+  0.03%                    0x00007fd8e07f9d2e: mov    0x60(%rbp),%r11d   ;*getfield negativeSuffix
+                                                                         ; - java.text.DecimalFormat::subformat@1202 (line 1892)
+                           0x00007fd8e07f9d32: mov    0x84(%rbp),%r10d   ;*getfield negativeSuffixFieldPositions
+                                                                         ; - java.text.DecimalFormat::getNegativeSuffixFieldPositions@1 (line 2538)
+                                                                         ; - java.text.DecimalFormat::subformat@1207 (line 1893)
+           0.01%           0x00007fd8e07f9d39: mov    0xc(%r12,%r10,8),%r8d  ;*arraylength
+                                                                         ; - java.text.DecimalFormat::append@24 (line 1923)
+                                                                         ; - java.text.DecimalFormat::subformat@1213 (line 1892)
+                                                                         ; implicit exception: dispatches to 0x00007fd8e07fd2c5
+                           0x00007fd8e07f9d3e: mov    0x0(%r13),%rax
+  0.07%    0.05%           0x00007fd8e07f9d42: mov    %rax,%r9
+                           0x00007fd8e07f9d45: and    $0x7,%r9
+                           0x00007fd8e07f9d49: cmp    $0x5,%r9
+                           0x00007fd8e07f9d4d: jne    0x00007fd8e07fc2ee
+                           0x00007fd8e07f9d53: mov    %rcx,%r9
+  0.03%                    0x00007fd8e07f9d56: or     %r15,%r9
+                           0x00007fd8e07f9d59: mov    %r9,%rbx
+                           0x00007fd8e07f9d5c: xor    %rax,%rbx
+                           0x00007fd8e07f9d5f: test   $0xffffffffffffff87,%rbx
+                           0x00007fd8e07f9d66: jne    0x00007fd8e07fc488  ;*synchronization entry
+                                                                         ; - java.lang.StringBuffer::length@-1 (line 163)
+                                                                         ; - java.text.DecimalFormat::append@1 (line 1919)
+                                                                         ; - java.text.DecimalFormat::subformat@1213 (line 1892)
+  0.03%    0.03%           0x00007fd8e07f9d6c: mov    0xc(%r13),%ecx
+                           0x00007fd8e07f9d70: mov    $0x7,%r9d
+                           0x00007fd8e07f9d76: and    0x0(%r13),%r9
+                           0x00007fd8e07f9d7a: cmp    $0x5,%r9
+                           0x00007fd8e07f9d7e: jne    0x00007fd8e07fc39c  ;*ireturn
+                                                                         ; - java.lang.StringBuffer::length@4 (line 163)
+                                                                         ; - java.text.DecimalFormat::append@1 (line 1919)
+                                                                         ; - java.text.DecimalFormat::subformat@1213 (line 1892)
+  0.01%    0.05%           0x00007fd8e07f9d84: mov    0xc(%r12,%r11,8),%r9d  ;*getfield value
+                                                                         ; - java.lang.String::length@1 (line 623)
+                                                                         ; - java.text.DecimalFormat::append@7 (line 1921)
+                                                                         ; - java.text.DecimalFormat::subformat@1213 (line 1892)
+                                                                         ; implicit exception: dispatches to 0x00007fd8e07fd281
+                           0x00007fd8e07f9d89: mov    0xc(%r12,%r9,8),%ebx  ; implicit exception: dispatches to 0x00007fd8e07fd291
+                           0x00007fd8e07f9d8e: test   %ebx,%ebx
+                           0x00007fd8e07f9d90: jle    0x00007fd8e07f9fd0  ;*ifle
+....................................................................................................
+ 21.47%   35.59%  <total for region 2>
+
+....[Hottest Regions]...............................................................................
+ 28.38%   11.67%  [0x7fd8e07e16ac:0x7fd8e07e1833] in sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa
+ 21.47%   35.59%  [0x7fd8e07f9668:0x7fd8e07f9d90] in java.text.DecimalFormat::subformat
+  6.41%    4.99%  [0x7fd8e07e1180:0x7fd8e07e1595] in sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa
+  6.31%    6.27%  [0xffffffff810644ba:0xffffffff810644bd] in [unknown] ([unknown])
+  5.35%    9.00%  [0x7fd8e07da5f5:0x7fd8e07da730] in java.text.DigitList::set
+  4.46%    1.98%  [0x7fd8e07e1573:0x7fd8e07e16d2] in sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa
+  3.15%    3.29%  [0x7fd8e07f1825:0x7fd8e07f1bd3] in java.text.DecimalFormat::format
+  2.12%    2.49%  [0x7fd8e0806fdf:0x7fd8e08072a4] in fourcasters.DoubleFormatting::superslow
+  1.58%    1.60%  [0x7fd8e07fa145:0x7fd8e07fa295] in java.text.DecimalFormat::subformat
+  1.47%    1.64%  [0x7fd8e06091d0:0x7fd8e0609284] in StubRoutines::jshort_disjoint_arraycopy
+  1.45%    1.02%  [0x7fd8f57c3340:0x7fd8f57c3349] in [unknown] (libjvm.so)
+  1.41%    1.69%  [0x7fd8e060924a:0x7fd8e06092ff] in StubRoutines::jshort_arraycopy; StubRoutines::jshort_disjoint_arraycopy
+  1.37%    1.23%  [0x7fd8e07f1720:0x7fd8e07f1822] in java.text.DecimalFormat::format
+  1.03%    0.89%  [0x7fd8e07f1d65:0x7fd8e07f1db4] in java.text.DecimalFormat::format
+  0.96%    1.13%  [0x7fd8e07f6360:0x7fd8e07f6507] in sun.misc.FloatingDecimal$BinaryToASCIIBuffer::getChars
+  0.90%    1.26%  [0x7fd8e07f9140:0x7fd8e07f9211] in java.text.DecimalFormat::subformat
+  0.81%    1.69%  [0x7fd8e07da747:0x7fd8e07da85f] in java.text.DigitList::set
+  0.80%    1.08%  [0x7fd8e07fa63f:0x7fd8e07fa6a8] in java.text.DecimalFormat::subformat
+  0.72%    0.91%  [0x7fd8e06094e5:0x7fd8e060954b] in StubRoutines::jlong_disjoint_arraycopy
+  0.72%    0.18%  [0x7fd8e07f92fc:0x7fd8e07f9410] in java.text.DecimalFormat::subformat
+  9.08%   10.39%  <...other 292 warm regions...>
+....................................................................................................
+ 99.99%  100.00%  <totals>
+
+....[Hottest Methods (after inlining)]..............................................................
+ 39.66%   18.84%  sun.misc.FloatingDecimal$BinaryToASCIIBuffer::dtoa
+ 27.48%   41.90%  java.text.DecimalFormat::subformat
+  8.05%    7.69%  [unknown] ([unknown])
+  6.74%   11.63%  java.text.DigitList::set
+  6.26%    7.20%  java.text.DecimalFormat::format
+  3.09%    2.97%  [unknown] (libjvm.so)
+  2.81%    2.78%  fourcasters.DoubleFormatting::superslow
+  1.47%    1.64%  StubRoutines::jshort_disjoint_arraycopy
+  1.41%    1.69%  StubRoutines::jshort_arraycopy; StubRoutines::jshort_disjoint_arraycopy
+  1.07%    1.64%  StubRoutines::jlong_disjoint_arraycopy
+  0.96%    1.14%  sun.misc.FloatingDecimal$BinaryToASCIIBuffer::getChars
+  0.30%    0.10%  java.lang.AbstractStringBuilder::append
+  0.09%    0.29%  org.openjdk.jmh.infra.Blackhole::consume
+  0.08%    0.10%  vfprintf (libc-2.23.so)
+  0.05%    0.05%  _IO_fwrite (libc-2.23.so)
+  0.05%    0.01%  __vsnprintf_chk (libc-2.23.so)
+  0.04%    0.01%  print_insn (hsdis-amd64.so)
+  0.04%    0.05%  _IO_default_xsputn (libc-2.23.so)
+  0.03%    0.01%  _IO_file_xsputn@@GLIBC_2.2.5 (libc-2.23.so)
+  0.03%    0.01%  _IO_old_init (libc-2.23.so)
+  0.27%    0.04%  <...other 21 warm methods...>
+....................................................................................................
+ 99.99%   99.82%  <totals>
+
+....[Distribution by Area]..........................................................................
+ 88.32%   88.87%  <generated code>
+  8.05%    7.69%  <native code in ([unknown])>
+  3.09%    2.98%  <native code in (libjvm.so)>
+  0.38%    0.35%  <native code in (libc-2.23.so)>
+  0.10%    0.05%  <native code in (hsdis-amd64.so)>
+  0.04%    0.05%  <native code in (libpthread-2.23.so)>
+....................................................................................................
+ 99.99%  100.00%  <totals>
+
+
+
+# Run complete. Total time: 00:00:26
+
+Benchmark                          Mode  Cnt    Score   Error  Units
+DoubleFormatting.speedyTest       thrpt    5  105.654 ± 5.181  ops/s
+DoubleFormatting.speedyTest:·asm  thrpt           NaN            ---
+DoubleFormatting.superslow        thrpt    5   70.104 ± 1.557  ops/s
+DoubleFormatting.superslow:·asm   thrpt           NaN            ---
